@@ -1,0 +1,71 @@
+services:
+  visualization:
+    build:
+      context: ./visualization
+      dockerfile: Dockerfile
+    container_name: review-galaxy-visualization
+    ports:
+      - "4200:4200"
+    networks:
+      review-galaxy-network:
+        ipv4_address: 172.20.0.2
+
+  middleware:
+    build:
+      context: ./middleware
+      dockerfile: Dockerfile
+    container_name: review-galaxy-middleware
+    environment:
+      DB_USER: review_galaxy_user
+      POSTGRES_PASSWORD: # LEAVE BLANK TO PULL FROM .env
+    ports:
+      - "3000:3000"
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      review-galaxy-network:
+        ipv4_address: 172.20.0.3
+
+  database:
+    build:
+      context: ./sql
+      dockerfile: Dockerfile
+    container_name: review-galaxy-database
+    environment:
+      POSTGRES_USER: review_galaxy_user
+      POSTGRES_PASSWORD: # LEAVE BLANK TO PULL FROM .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+    volumes:
+      - review-galaxy-db:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      review-galaxy-network:
+        ipv4_address: 172.20.0.4
+
+  adminer:
+    image: adminer:latest
+    container_name: review-galaxy-adminer
+    ports:
+      - 8080:8080
+    networks:
+      review-galaxy-network:
+        ipv4_address: 172.20.0.5
+
+volumes:
+  review-galaxy-db:
+    name: review-galaxy-db
+
+networks:
+  review-galaxy-network:
+    name: review-galaxy-network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
