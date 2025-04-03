@@ -1,8 +1,5 @@
-FROM node:latest
+FROM openjdk:17
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
+COPY target/middleware-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 3000
-CMD ["node", "dist/index.js"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
