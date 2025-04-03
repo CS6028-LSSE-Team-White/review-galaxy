@@ -1,8 +1,6 @@
-FROM node:latest
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
+FROM openjdk:21-jdk-slim-bullseye
 COPY . .
-RUN npm run build
-EXPOSE 3000
-CMD ["node", "dist/index.js"]
+RUN ./mvnw clean package -DskipTests
+# Copy the jar file to the root directory
+RUN cp target/middleware-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java","-jar", "-Dserver.port=3000", "/app.jar"]
