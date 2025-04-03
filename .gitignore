@@ -16,7 +16,6 @@ middleware/bazel-out
 visualization/node_modules
 visualization/npm-debug.log
 visualization/yarn-error.log
-middleware/.mvn
 
 # Angular 
 visualization/.angular
