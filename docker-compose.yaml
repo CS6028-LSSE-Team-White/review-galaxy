@@ -15,6 +15,7 @@ services:
       context: ./middleware
       dockerfile: Dockerfile
     container_name: review-galaxy-middleware
+    entrypoint: ["java","-jar", "-Dserver.port=3000", "/app.jar"]
     environment:
       DB_USER: review_galaxy_user
       POSTGRES_PASSWORD: # LEAVE BLANK TO PULL FROM .env
@@ -35,6 +36,8 @@ services:
     environment:
       POSTGRES_USER: review_galaxy_user
       POSTGRES_PASSWORD: # LEAVE BLANK TO PULL FROM .env
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_HOST_AUTH_METHOD: md5
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER"]
       interval: 5s
