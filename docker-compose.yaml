@@ -15,7 +15,7 @@ services:
       context: ./middleware
       dockerfile: Dockerfile
     container_name: review-galaxy-middleware
-    entrypoint: ["java","-jar", "-Dserver.port=3000", "/app.jar"]
+    entrypoint: ["java", "-jar", "-Dserver.port=3000", "/app/app.jar"]
     environment:
       DB_USER: review_galaxy_user
       POSTGRES_PASSWORD: # LEAVE BLANK TO PULL FROM .env
