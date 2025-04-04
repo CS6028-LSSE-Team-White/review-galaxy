@@ -1,4 +1,4 @@
-name: Build Docker Image and Push to ACR
+name: Docker Build and Deploy
 
 on:
   pull_request:
@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@4
+        uses: actions/checkout@v4
 
       - name: Docker Compose Build
         run: docker-compose -f docker-compose.yaml build
