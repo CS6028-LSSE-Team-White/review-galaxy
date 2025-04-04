@@ -66,7 +66,7 @@ jobs:
         run: |
           for SERVICE in visualization middleware database; do
             docker tag review-galaxy-$SERVICE $REGISTRY/$SERVICE:${{ github.sha }}
-            docker tag review-galaxy-$SERVICE $REGISTRY/$SERVICE:${{ github.sha }}
+            docker tag review-galaxy-$SERVICE $REGISTRY/$SERVICE:latest
             docker push $REGISTRY/$SERVICE:${{ github.sha }}
             docker push $REGISTRY/$SERVICE:latest
           done
