@@ -7,7 +7,11 @@ on:
   push:
     branches:
       - 'main'
-
+      
+permissions:
+  id-token: write
+  contents: read
+  
 env:
   REGISTRY: ${{ secrets.REGISTRY_NAME }}.azurecr.io
 
@@ -19,5 +23,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Azure Login
+        if: github.event_name == 'push'
+        uses: azure/login@v2.3
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Docker Compose Build
         run: docker compose -f docker-compose.yaml build
+
+      - name: List All Created Images
+        run: docker image ls
+
