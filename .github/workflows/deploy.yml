@@ -1,1 +1,23 @@
+name: Build Docker Image and Push to ACR
 
+on:
+  pull_request:
+    branches:
+      - '**'
+  push:
+    branches:
+      - 'main'
+
+env:
+  REGISTRY: ${{ secrets.REGISTRY_NAME }}.azurecr.io
+
+jobs:
+  build:
+    name: Build docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@4
+
+      - name: Docker Compose Build
+        run: docker-compose -f docker-compose.yaml build
