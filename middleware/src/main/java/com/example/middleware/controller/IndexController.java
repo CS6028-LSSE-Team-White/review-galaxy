@@ -32,9 +32,7 @@ public class IndexController {
 					LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, java.time.ZoneId.systemDefault());
             return new APIResponse(APIStatus.SUCCESS, "Database is up and running", localDateTime);
         } catch (Exception e) {
-						// Log the exception (optional)
-						e.printStackTrace();
-            return new APIResponse(APIStatus.ERROR, "Database is down");
+            return new APIResponse(APIStatus.ERROR, e.getMessage());
         }
     }
 }

@@ -19,7 +19,10 @@ public class ReviewController {
     @GetMapping("/reviews")
     public APIResponse getReviews() {
         try {
-            return new APIResponse(APIStatus.SUCCESS, objectMapper.writeValueAsString(reviewService.getAllReviews()));
+            return new APIResponse(
+                    APIStatus.SUCCESS,
+                    objectMapper.writeValueAsString(reviewService.getAllReviews())
+            );
         } catch (Exception e) {
             return new APIResponse(APIStatus.ERROR, e.getMessage());
         }
