@@ -1,17 +1,15 @@
 package com.example.middleware.controller;
 
 
+import com.example.middleware.dto.ReviewDTO;
 import com.example.middleware.model.APIResponse;
 import com.example.middleware.model.APIStatus;
-import com.example.middleware.model.Review;
 import com.example.middleware.service.ReviewService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class ReviewController {
@@ -40,15 +38,12 @@ public class ReviewController {
     }
 
     @PostMapping("/review")
-    public APIResponse createReview(@RequestBody Review review) {
+    public APIResponse createReview(@RequestBody ReviewDTO reviewDTO) {
         try {
            return new APIResponse(
                    APIStatus.SUCCESS,
                    objectMapper.writeValueAsString(
-                       reviewService.createReview(
-                               review.getUsername(), review.getRating(),
-                               review.getComment(), review.getProductVersion(),
-                               review.getTimestamp()))
+                       reviewService.createReview(reviewDTO))
            );
         } catch (Exception e) {
             return new APIResponse(APIStatus.ERROR, e.getMessage());

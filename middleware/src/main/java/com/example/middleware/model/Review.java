@@ -1,5 +1,6 @@
 package com.example.middleware.model;
 
+import com.example.middleware.dto.ReviewDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -8,7 +9,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
 import org.springframework.lang.Nullable;
 
 import java.sql.Timestamp;
@@ -45,11 +45,17 @@ public class Review {
 
     public Review(String username, Integer rating, @Nullable String comment, String version, Timestamp timestamp) {
         this.username = username;
-        this.comment = comment;
         this.rating = rating;
         this.productVersion = version;
         this.comment = comment;
         this.timestamp = timestamp;
     }
 
+    public Review(ReviewDTO dto) {
+        this.rating = dto.getRating();
+        this.username = dto.getUsername();
+        this.productVersion = dto.getProduct_version();
+        this.comment = dto.getComment();
+        this.timestamp = new Timestamp(System.currentTimeMillis());
+    }
 }
