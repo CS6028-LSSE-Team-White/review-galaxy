@@ -32,7 +32,6 @@ public class MiddlewareApplication {
 
     @EventListener(ApplicationReadyEvent.class)
     public void loadSampleData() throws IOException, CsvException {
-        System.out.println("🔄 Loading sample data...");
         loadFeatures();
         loadReviews();
     }
