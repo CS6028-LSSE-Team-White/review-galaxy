@@ -25,55 +25,52 @@ export type Feature = {
 export type Review = {
   nodeId: string;
   reviewId: string;
-  score: Number;
+  score: number; //this needed to be changed from Number to number
   reviewer: string;
   reviewDate: Date;
   content: string;
   appVersion: string;
 };
 
-let example: Product = {
+//Longer Mock Data (ChatGPT generated)
+export const mockData: Product = {
   releases: [
     {
-      nodeId: 'version5',
-      versionId: '5.17.5(31030)',
-      releaseDate: new Date('2024-01-23'),
-      features: [
-        {
-          title: 'Feature 1',
-          description: 'Description of feature 1',
-          category: 'General',
-        },
-        {
-          title: 'Feature 2',
-          description: 'Description of feature 2',
-          category: 'General',
-        },
-      ],
+      nodeId: "version_5_9_0_3502",
+      versionId: "5.9.0.3502",
+      releaseDate: new Date("2024-01-21T07:27:55"),
+      features: [],
       reviews: [
         {
-          nodeId: 'ver5review1',
-          reviewId: 'mockID',
-          score: 5,
-          reviewer: 'John Doe',
-          reviewDate: new Date('2024-01-23'),
-          content: 'Sample Content',
-          appVersion: '5.17.5(31030)',
+          nodeId: "review_a9dcc643-7a8b-4ead-866b-13324940ab8b",
+          reviewId: "a9dcc643-7a8b-4ead-866b-13324940ab8b",
+          score: 1,
+          reviewer: "Nadeeshani Hewage",
+          reviewDate: new Date("2024-01-21T07:27:55"),
+          content: "I cannot update this. I don't know why? It deducts my data but does not update properly.",
+          appVersion: "5.9.0.3502"
         },
         {
-          nodeId: 'ver1review2',
-          reviewId: 'mockID',
-          score: 5,
-          reviewer: 'John Doe',
-          reviewDate: new Date('2024-01-23'),
-          content: 'Sample Content',
-          appVersion: '5.17.5(31030)',
-        },
-      ],
+          nodeId: "review_dba69011-9c53-47d7-aeb3-c79ea8e56e95",
+          reviewId: "dba69011-9c53-47d7-aeb3-c79ea8e56e95",
+          score: 1,
+          reviewer: "Jitendra mishra",
+          reviewDate: new Date("2024-01-19T04:38:13"),
+          content: "Poor",
+          appVersion: "5.9.0.3502"
+        }
+      ]
     },
+    // more releases...
   ],
   links: [
-    { sourceNodeId: 'version5', targetNodeId: 'ver5review1' },
-    { sourceNodeId: 'version5', targetNodeId: 'ver5review2' },
-  ],
+    {
+      sourceNodeId: "version_5_9_0_3502",
+      targetNodeId: "review_a9dcc643-7a8b-4ead-866b-13324940ab8b"
+    },
+    {
+      sourceNodeId: "version_5_9_0_3502",
+      targetNodeId: "review_dba69011-9c53-47d7-aeb3-c79ea8e56e95"
+    }
+  ]
 };
