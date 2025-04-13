@@ -38,7 +38,7 @@ jobs:
     name: Build and Deploy Docker Images
     runs-on: ubuntu-latest
     environment: Prod
-    if: github.event_name == 'push'
+    #if: github.event_name == 'push'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -69,4 +69,5 @@ jobs:
             docker tag review-galaxy-$SERVICE $REGISTRY/$SERVICE:latest
             docker push $REGISTRY/$SERVICE:${{ github.sha }}
             docker push $REGISTRY/$SERVICE:latest
+            az containerapp update --name review-galaxy-$SERVICE-ca --resource-group review-galaxy --image $REGISTRY/$SERVICE:${{ github.sha }}
           done
