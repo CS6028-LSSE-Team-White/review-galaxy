@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -34,12 +35,20 @@ public class ReviewService {
         return reviewRepository.findById(id).orElseThrow();
     }
 
+    public Iterable<Review> getReviewsByProductVersion(String version) {
+        return reviewRepository.getAllByProductVersion(version);
+    }
+
     public ReviewDTO toDTO(Review review) {
        return new ReviewDTO(review.getRating(), review.getUsername(), review.getProductVersion(), review.getComment());
     }
 
     public Review toReview(ReviewDTO dto) {
         return new Review(dto);
+    }
+
+    public void createReviewsBulk(List<Review> reviews) {
+        reviewRepository.saveAll(reviews);
     }
 
 }

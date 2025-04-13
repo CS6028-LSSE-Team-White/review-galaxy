@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     Optional<Review> getReviewById(@NotNull Long id);
     Iterable<Review> getAllByUsername(@NotNull String username);
+    Iterable<Review> getAllByProductVersion(String productVersion);
 }

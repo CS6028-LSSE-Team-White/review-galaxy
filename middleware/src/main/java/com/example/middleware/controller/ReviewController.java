@@ -4,10 +4,13 @@ package com.example.middleware.controller;
 import com.example.middleware.dto.ReviewDTO;
 import com.example.middleware.model.APIResponse;
 import com.example.middleware.model.APIStatus;
+import com.example.middleware.model.Review;
 import com.example.middleware.service.ReviewService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,6 +37,18 @@ public class ReviewController {
             return new APIResponse(
                     APIStatus.SUCCESS,
                     objectMapper.writeValueAsString(reviewService.getReviewById(id))
+            );
+        } catch (Exception e) {
+            return new APIResponse(APIStatus.ERROR, e.getMessage());
+        }
+    }
+
+    @GetMapping("/reviews/version/{version}")
+    public APIResponse getReviewsByProductVersion(@NotNull @PathVariable String version) {
+        try {
+            return new APIResponse(
+                    APIStatus.SUCCESS,
+                    objectMapper.writeValueAsString(reviewService.getReviewsByProductVersion(version))
             );
         } catch (Exception e) {
             return new APIResponse(APIStatus.ERROR, e.getMessage());
