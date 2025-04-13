@@ -17,4 +17,12 @@ public class Util {
         CSVReader csvReader = new CSVReader(reader);
         return csvReader.readAll();
     }
+
+    public static List<String[]> readZoomFeatures(String filePath) throws IOException, CsvException {
+        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
+            return reader.readAll();
+        }
+    }
+    
+    
 }
