@@ -1,9 +1,9 @@
 import { Component, Input, OnInit, ElementRef } from '@angular/core';
 import * as d3 from 'd3';
 
-// Import static feature and review data
-import featuresData from 'src/assets/features.json';
-import reviewsData from 'src/assets/reviews.json';
+// // Import static feature and review data
+// import featuresData from 'src/assets/features.json';
+// import reviewsData from 'src/assets/reviews.json';
 
 @Component({
   selector: 'app-radial-graph',
@@ -12,15 +12,15 @@ import reviewsData from 'src/assets/reviews.json';
 })
 export class RadialGraphComponent implements OnInit {
   @Input() productData!: any; // Input property to receive external product data
-  features: any[] = [];       // Array to store features
-  reviews: any[] = [];        // Array to store reviews
+  features: any[] = []; // Array to store features
+  reviews: any[] = []; // Array to store reviews
 
   constructor(private el: ElementRef) {}
 
   ngOnInit(): void {
     // Load feature and review data
-    this.features = featuresData;
-    this.reviews = reviewsData;
+    this.features = this.productData.features;
+    this.reviews = this.productData.reviews;
 
     // Ensure releases array is initialized
     if (!this.productData.releases) {
@@ -33,7 +33,9 @@ export class RadialGraphComponent implements OnInit {
 
     // Handle responsiveness on window resize
     window.addEventListener('resize', this.handleResize.bind(this));
-  }
+  } // Import static feature and review data
+  // import featuresData from 'src/assets/features.json';
+  // import reviewsData from 'src/assets/reviews.json';
 
   // Clears and redraws the graph on window resize
   handleResize(): void {
@@ -49,15 +51,21 @@ export class RadialGraphComponent implements OnInit {
 
     // Group features by their full release version
     this.features.forEach((feature: any) => {
-      const version = feature.releaseVersion;
+      const version = feature['release_version'];
       if (!versionGroups[version]) {
         versionGroups[version] = [];
       }
       versionGroups[version].push(feature);
     });
 
+    // Add a new product_version key to each review
+    // TODO: create logic here to assign product_version based on review date
+    this.reviews.forEach((review: any) => {
+      review['product_version'] = '5.17.5';
+    });
+
     // Map version groups into structured release objects
-    this.productData.releases = Object.keys(versionGroups).map(version => {
+    this.productData.releases = Object.keys(versionGroups).map((version) => {
       const features = versionGroups[version];
       const majorVersion = version.split('.').slice(0, 2).join('.');
 
@@ -94,7 +102,11 @@ export class RadialGraphComponent implements OnInit {
 
     // Extract and sort unique major versions to create rings
     const majorVersions = Array.from(
-      new Set(this.productData.releases.map((r: { majorVersion: string }) => r.majorVersion))
+      new Set(
+        this.productData.releases.map(
+          (r: { majorVersion: string }) => r.majorVersion
+        )
+      )
     ).sort();
 
     // Create a zoomable container layer
@@ -102,7 +114,8 @@ export class RadialGraphComponent implements OnInit {
     let currentTransform = d3.zoomIdentity;
 
     // Enable scroll-based zoom only (no dragging)
-    const zoom = d3.zoom()
+    const zoom = d3
+      .zoom()
       .filter((event: any) => {
         return event.type === 'wheel';
       })
@@ -119,7 +132,10 @@ export class RadialGraphComponent implements OnInit {
       event.preventDefault();
       const direction = -event.deltaY;
       const zoomAmount = direction > 0 ? 1.1 : 0.9;
-      const newScale = Math.max(0.5, Math.min(5, currentTransform.k * zoomAmount));
+      const newScale = Math.max(
+        0.5,
+        Math.min(5, currentTransform.k * zoomAmount)
+      );
       const newTransform = d3.zoomIdentity
         .translate(currentTransform.x, currentTransform.y)
         .scale(newScale);
@@ -128,7 +144,8 @@ export class RadialGraphComponent implements OnInit {
     });
 
     // Draw center circle
-    svg.append('circle')
+    svg
+      .append('circle')
       .attr('cx', centerX)
       .attr('cy', centerY)
       .attr('r', 20)
@@ -151,7 +168,8 @@ export class RadialGraphComponent implements OnInit {
     majorVersions.forEach((majorVersion, i) => {
       const radius = baseRadius + i * ringSpacing;
 
-      zoomLayer.append('circle')
+      zoomLayer
+        .append('circle')
         .attr('cx', centerX)
         .attr('cy', centerY)
         .attr('r', radius)
@@ -160,7 +178,8 @@ export class RadialGraphComponent implements OnInit {
         .attr('stroke-width', 1)
         .attr('stroke-dasharray', '2,4');
 
-      zoomLayer.append('text')
+      zoomLayer
+        .append('text')
         .attr('x', centerX)
         .attr('y', centerY - radius - 10)
         .attr('text-anchor', 'middle')
@@ -181,7 +200,10 @@ export class RadialGraphComponent implements OnInit {
       const circleRadius = 30 + 1.5 * release.features.length;
 
       const avgRating = release.reviews.length
-        ? release.reviews.reduce((acc: number, r: { rating: number }) => acc + r.rating, 0) / release.reviews.length
+        ? release.reviews.reduce(
+            (acc: number, r: { rating: number }) => acc + r.rating,
+            0
+          ) / release.reviews.length
         : 0;
 
       let fillColor = '#ffff00';
@@ -189,7 +211,8 @@ export class RadialGraphComponent implements OnInit {
       else if (avgRating <= 2) fillColor = '#e74c3c';
 
       // Draw version bubble
-      zoomLayer.append('circle')
+      zoomLayer
+        .append('circle')
         .attr('cx', x)
         .attr('cy', y)
         .attr('r', circleRadius)
@@ -201,7 +224,8 @@ export class RadialGraphComponent implements OnInit {
       const fontSizeFeatures = circleRadius / 5;
 
       // Version label inside the circle
-      zoomLayer.append('text')
+      zoomLayer
+        .append('text')
         .attr('x', x)
         .attr('y', y - 5)
         .attr('text-anchor', 'middle')
@@ -211,14 +235,19 @@ export class RadialGraphComponent implements OnInit {
         .text(`${release.versionId}`);
 
       // Feature count label inside the circle
-      zoomLayer.append('text')
+      zoomLayer
+        .append('text')
         .attr('x', x)
         .attr('y', y + 10)
         .attr('text-anchor', 'middle')
         .style('font-size', `${fontSizeFeatures}px`)
         .style('font-weight', 'bold')
         .style('font-family', 'Open Sans, sans-serif')
-        .text(`${release.features.length} Feature${release.features.length !== 1 ? 's' : ''}`);
+        .text(
+          `${release.features.length} Feature${
+            release.features.length !== 1 ? 's' : ''
+          }`
+        );
 
       // Orbiting review circles
       const reviewOrbitRadius = circleRadius + 25;
@@ -232,7 +261,8 @@ export class RadialGraphComponent implements OnInit {
         else if (review.rating < 4) color = '#f1c40f';
 
         // Draw review dot with tooltip on hover
-        zoomLayer.append('circle')
+        zoomLayer
+          .append('circle')
           .attr('cx', rx)
           .attr('cy', ry)
           .attr('r', 10)
@@ -242,8 +272,7 @@ export class RadialGraphComponent implements OnInit {
             tooltip
               .style('opacity', 1)
               .style('left', `${event.pageX + 10}px`)
-              .style('top', `${event.pageY - 20}px`)
-              .html(`
+              .style('top', `${event.pageY - 20}px`).html(`
                 <div style="font-family: 'Open Sans', sans-serif;">
                   <div style="font-weight: bold; font-size: 20px;">${review.username}</div>
                   <div style="font-size: 16px;"><em>Version: ${review.product_version}</em></div>
