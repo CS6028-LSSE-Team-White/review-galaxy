@@ -1,0 +1,206 @@
+[
+      {
+        "id": 1,
+        "feature": "0",
+        "description": "Free account users will have greater control of the product tabs shown on the Zoom desktop client, having greater flexibility over display order and which product tabs are always visible or hidden within the More option. This will initially be available for free accounts, with users on paid accounts getting this functionality in another later release.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.5"
+      },
+      {
+        "id": 2,
+        "feature": "1",
+        "description": "Disabled by default, admins can enable this policy to disable the ability for users to assign a participant the role of manually entering captions. This does not affect the use of automated captions or captions provided by a third-party service.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.5"
+      },
+      {
+        "id": 3,
+        "feature": "2",
+        "description": "Disabled by default, admins can enable this policy to disable P2P STUN traffic from the Zoom app. This traffic is the Zoom app checking if admin web settings allow for P2P meetings on the network.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.5"
+      },
+      {
+        "id": 4,
+        "feature": "3",
+        "description": "Meeting users wanting a more engaging sharing session can utilize this new presenter layout, which combines your video and shared screen to present everything in one frame. Presenters have a few different layout options, ranging from having the content appear over-the-shoulder of your video, the presenter appearing in front of the content, or the presenter and the content appearing side-by-side. These options are available in the sharing window where users can select what they want to share, the layout of their video and the shared content, and a common virtual background for both you and the content. Admins can also control the use of this through web settings available at the account, group, and user-level settings pages.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.5"
+      },
+      {
+        "id": 5,
+        "feature": "4",
+        "description": "Automated and translated captioning support is expanding to include captioning for Cantonese and Thai languages. These are enabled by default, but admins can control the availability of this language through the Automated captions and Translated captions settings within the web portal.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.5"
+      },
+      {
+        "id": 6,
+        "feature": "5",
+        "description": "Accounts using the translated captions feature will be able to have automated captions translated from English to Greek, facilitating easier communication between participants in Zoom Meetings. This language is enabled by default, but admins can control availability of this through settings in the web portal.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.5"
+      },
+      {
+        "id": 7,
+        "feature": "6",
+        "description": "If the Allow host to create meeting polls and quizzes setting is enabled by admins, users can attach polls to a meeting or webinar instance and save a copy of polls attached to a meeting or webinar to their Personal Library.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.5"
+      },
+      {
+        "id": 8,
+        "feature": "7",
+        "description": "The Team Chat Quick Schedule with AI Companion simplifies meeting scheduling in chats using AI technology, eliminating the need to switch between different applications to coordinate and schedule a meeting. When activated, the system identifies potential meeting scenarios in chat messages and streamlines the scheduling process to boost productivity.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.5"
+      },
+      {
+        "id": 9,
+        "feature": "8",
+        "description": "In addition to restricting who can post in a channel, channel admins can choose to allow all other channel members to post, but only as a reply to a message. This provides announcement channels with only threaded replies, keeping discussions focused on the announcements provided by approved posters.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.5"
+      },
+      {
+        "id": 10,
+        "feature": "9",
+        "description": "The Drafts section in the left side panel for Team Chat will be renamed to Drafts and Sent and include a dedicated section for Sent Messages, helping users quickly find messages they sent.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.5"
+      },
+      {
+        "id": 11,
+        "feature": "10",
+        "description": "Channel, group chat, and continuous meeting chat owners can manually archive their unused chat channels, group chats, and continuous meeting chats. When these are archived, they are closed to new activity, but the message history is retained and searchable, allowing members to continue to access messages, files, and other information if needed again in the future. These chats can also be unarchived if the discussion needs to be re-opened. Admins can also set auto-archive policies from the web portal.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.5"
+      },
+      {
+        "id": 12,
+        "feature": "11",
+        "description": "The latest sent message in a 1:1 chat or small group chat or channel (20 members max) can show read receipts of who has read the message so far. Visibility of read receipts can potentially be disabled through the Team Chat section of client settings, if allowed by admins.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.5"
+      },
+      {
+        "id": 13,
+        "feature": "12",
+        "description": "Users can preview documents that are attached to emails in the Zoom Mail client. PDF, image files, and all other file formats are supported for document preview.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.5"
+      },
+      {
+        "id": 14,
+        "feature": "13",
+        "description": "The Zoom Calendar client supports labeling an event with colors. Zoom and Google calendar service clients support this feature. Note: This feature is not supported by Microsoft/Outlook.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.5"
+      },
+      {
+        "id": 15,
+        "feature": "14",
+        "description": "When an event organizer adds an attendee to an event, the attendee’s profile card will be displayed so that the event organizer can view their contact details.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.5"
+      },
+      {
+        "id": 16,
+        "feature": "15",
+        "description": "When all attendees have declined a meeting, the event organizer will see a warning label in Zoom Calendar. The warning label will not appear when only a few attendees have declined the meeting.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.5"
+      },
+      {
+        "id": 17,
+        "feature": "16",
+        "description": "Users can decline and remove invited meetings so that they no longer appear in the meetings list on the Zoom client’s Meetings tab.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.5"
+      },
+      {
+        "id": 18,
+        "feature": "17",
+        "description": "Users can decline and remove invited meetings so that they no longer appear in the meetings list on the Zoom client’s Meetings tab.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.6"
+      },
+      {
+        "id": 19,
+        "feature": "18",
+        "description": "Users can decline and remove invited meetings so that they no longer appear in the meetings list on the Zoom client’s Meetings tab.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.17.8"
+      },
+      {
+        "id": 18,
+        "feature": "17",
+        "description": "Users can decline and remove invited meetings so that they no longer appear in the meetings list on the Zoom client’s Meetings tab.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.18.6"
+      },
+      {
+        "id": 18,
+        "feature": "17",
+        "description": "Users can decline and remove invited meetings so that they no longer appear in the meetings list on the Zoom client’s Meetings tab.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.18.6"
+      },
+      {
+        "id": 18,
+        "feature": "17",
+        "description": "Users can decline and remove invited meetings so that they no longer appear in the meetings list on the Zoom client’s Meetings tab.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.18.6"
+      },
+      {
+        "id": 18,
+        "feature": "17",
+        "description": "Users can decline and remove invited meetings so that they no longer appear in the meetings list on the Zoom client’s Meetings tab.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.18.6"
+      },
+      {
+        "id": 18,
+        "feature": "17",
+        "description": "Users can decline and remove invited meetings so that they no longer appear in the meetings list on the Zoom client’s Meetings tab.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.18.6"
+      },
+      {
+        "id": 18,
+        "feature": "17",
+        "description": "Users can decline and remove invited meetings so that they no longer appear in the meetings list on the Zoom client’s Meetings tab.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.18.6"
+      },
+      {
+        "id": 18,
+        "feature": "17",
+        "description": "Users can decline and remove invited meetings so that they no longer appear in the meetings list on the Zoom client’s Meetings tab.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.18.6"
+      },
+      {
+        "id": 18,
+        "feature": "17",
+        "description": "Users can decline and remove invited meetings so that they no longer appear in the meetings list on the Zoom client’s Meetings tab.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.18.6"
+      },
+      {
+        "id": 18,
+        "feature": "17",
+        "description": "Users can decline and remove invited meetings so that they no longer appear in the meetings list on the Zoom client’s Meetings tab.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.18.6"
+      },
+      {
+        "id": 19,
+        "feature": "18",
+        "description": "Users can decline and remove invited meetings so that they no longer appear in the meetings list on the Zoom client’s Meetings tab.",
+        "releaseDate": "2024-01-23",
+        "releaseVersion": "5.19.8"
+      }
+    ]
+  

@@ -78,28 +78,27 @@ public class MiddlewareApplication {
     }
 
     private void loadFeatures() {
-      try {
-          String currentPath = Paths.get("").toAbsolutePath().toString();
-          String path = currentPath + File.separator + "zoom-features.csv";
-  
-          List<String[]> features = Util.readZoomFeatures(path);
-  
-          for (int i = 1; i < features.size(); i++) {
-              String[] row = features.get(i);
-  
-              String feature = row[0];
-              String description = row[1];
-              java.sql.Date releaseDate = java.sql.Date.valueOf(row[2]);
-              String version = row[3].replace("version ", "").trim();
-              version = version.replaceAll(" \\(.*\\)", "");
-  
-              featureService.createFeature(new FeatureDTO(feature, description, releaseDate, version));
-          }
+        try {
+            String currentPath = Paths.get("").toAbsolutePath().toString();
+            String path = currentPath + File.separator + "zoom-features.csv";
 
-      } catch (Exception e) {
-          e.printStackTrace();
-      }
-  }
-  
+            List<String[]> features = Util.readZoomFeatures(path);
+
+            for (int i = 1; i < features.size(); i++) {
+                String[] row = features.get(i);
+
+                String feature = row[0];
+                String description = row[1];
+                java.sql.Date releaseDate = java.sql.Date.valueOf(row[2]);
+                String version = row[3].replace("version ", "").trim();
+                version = version.replaceAll(" \\(.*\\)", "");
+
+                featureService.createFeature(new FeatureDTO(feature, description, releaseDate, version));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
-  

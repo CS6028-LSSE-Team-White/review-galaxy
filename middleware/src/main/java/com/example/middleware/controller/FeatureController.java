@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200") // Allow requests from the Angular frontend
 public class FeatureController {
     private final FeatureService featureService;
     private final ObjectMapper objectMapper;
@@ -20,8 +21,7 @@ public class FeatureController {
         try {
             return new APIResponse(
                     APIStatus.SUCCESS,
-                    objectMapper.writeValueAsString(featureService.getAllFeatures())
-            );
+                    objectMapper.writeValueAsString(featureService.getAllFeatures()));
         } catch (Exception e) {
             return new APIResponse(APIStatus.ERROR, e.getMessage());
         }
@@ -32,8 +32,7 @@ public class FeatureController {
         try {
             return new APIResponse(
                     APIStatus.SUCCESS,
-                    objectMapper.writeValueAsString(featureService.getFeatureById(id))
-            );
+                    objectMapper.writeValueAsString(featureService.getFeatureById(id)));
         } catch (Exception e) {
             return new APIResponse(APIStatus.ERROR, e.getMessage());
         }
@@ -45,8 +44,7 @@ public class FeatureController {
             return new APIResponse(
                     APIStatus.SUCCESS,
                     objectMapper.writeValueAsString(
-                            featureService.createFeature(featureDTO))
-            );
+                            featureService.createFeature(featureDTO)));
         } catch (Exception e) {
             return new APIResponse(APIStatus.ERROR, e.getMessage());
         }
