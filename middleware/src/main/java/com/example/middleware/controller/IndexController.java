@@ -24,13 +24,11 @@ public class IndexController {
         return new APIResponse(APIStatus.SUCCESS, "Welcome to the Middleware API");
     }
 
-    @GetMapping("/database-health")
+    @GetMapping("/middleware-health")
     public APIResponse databaseHealth() {
         try {
-					// convert instant to local date time
-					Instant instant = entityManager.createQuery("SELECT NOW()", Instant.class).getSingleResult();
-					LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, java.time.ZoneId.systemDefault());
-            return new APIResponse(APIStatus.SUCCESS, "Database is up and running", localDateTime);
+            LocalDateTime localDateTime = LocalDateTime.now();
+            return new APIResponse(APIStatus.SUCCESS, "Middleware is up and running", localDateTime);
         } catch (Exception e) {
             return new APIResponse(APIStatus.ERROR, e.getMessage());
         }
