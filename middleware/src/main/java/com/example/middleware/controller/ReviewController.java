@@ -1,22 +1,21 @@
 package com.example.middleware.controller;
 
 
-import com.example.middleware.dto.ReviewDTO;
 import com.example.middleware.model.APIResponse;
 import com.example.middleware.model.APIStatus;
 import com.example.middleware.model.Review;
-import com.example.middleware.service.ReviewService;
+import com.example.middleware.util.Util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class ReviewController {
-    private final ReviewService reviewService;
     private final ObjectMapper objectMapper;
 
     @GetMapping("/reviews")
@@ -24,7 +23,7 @@ public class ReviewController {
         try {
             return new APIResponse(
                     APIStatus.SUCCESS,
-                    objectMapper.writeValueAsString(reviewService.getAllReviews())
+                    objectMapper.writeValueAsString(Util.getReviews())
             );
         } catch (Exception e) {
             return new APIResponse(APIStatus.ERROR, e.getMessage());
@@ -34,9 +33,10 @@ public class ReviewController {
     @GetMapping("/review/{id}")
     public APIResponse getReviewById(@NotNull @PathVariable Long id) {
         try {
+            Review review = Util.findReviewById(id);
             return new APIResponse(
                     APIStatus.SUCCESS,
-                    objectMapper.writeValueAsString(reviewService.getReviewById(id))
+                    objectMapper.writeValueAsString(Util.findReviewById(id))
             );
         } catch (Exception e) {
             return new APIResponse(APIStatus.ERROR, e.getMessage());
@@ -46,26 +46,13 @@ public class ReviewController {
     @GetMapping("/reviews/version/{version}")
     public APIResponse getReviewsByProductVersion(@NotNull @PathVariable String version) {
         try {
+            List<Review> revs = Util.findReviewsByProductVersion(version);
             return new APIResponse(
                     APIStatus.SUCCESS,
-                    objectMapper.writeValueAsString(reviewService.getReviewsByProductVersion(version))
+                    objectMapper.writeValueAsString(revs)
             );
         } catch (Exception e) {
             return new APIResponse(APIStatus.ERROR, e.getMessage());
         }
     }
-
-    @PostMapping("/review")
-    public APIResponse createReview(@RequestBody ReviewDTO reviewDTO) {
-        try {
-           return new APIResponse(
-                   APIStatus.SUCCESS,
-                   objectMapper.writeValueAsString(
-                       reviewService.createReview(reviewDTO))
-           );
-        } catch (Exception e) {
-            return new APIResponse(APIStatus.ERROR, e.getMessage());
-        }
-    }
-
 }

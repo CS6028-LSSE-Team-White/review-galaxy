@@ -9,15 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.middleware.model.APIResponse;
 import com.example.middleware.model.APIStatus;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class IndexController {
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @GetMapping("/")
     public APIResponse home() {
