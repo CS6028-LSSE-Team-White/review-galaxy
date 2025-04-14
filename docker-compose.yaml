@@ -15,55 +15,12 @@ services:
       context: ./middleware
       dockerfile: Dockerfile
     container_name: review-galaxy-middleware
-    entrypoint: ["java", "-jar", "-Dserver.port=3000", "-Dserver.address=0.0.0.0", "/app/app.jar"]
-    environment:
-      DB_USER: review_galaxy_user
-      POSTGRES_PASSWORD: # LEAVE BLANK TO PULL FROM .env
+    entrypoint: ["java", "-jar", "-Dserver.port=3000", "/app/app.jar"]
     ports:
       - "3000:3000"
-    depends_on:
-      database:
-        condition: service_healthy
     networks:
       review-galaxy-network:
         ipv4_address: 172.20.0.3
-
-  database:
-    build:
-      context: ./sql
-      dockerfile: Dockerfile
-    container_name: review-galaxy-database
-    environment:
-      POSTGRES_USER: review_galaxy_user
-      POSTGRES_PASSWORD: # LEAVE BLANK TO PULL FROM .env
-      PGDATA: /var/lib/postgresql/data/pgdata
-      POSTGRES_HOST_AUTH_METHOD: md5
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    ports:
-      - "5433:5432"
-    volumes:
-      - review-galaxy-db:/var/lib/postgresql/data
-      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      review-galaxy-network:
-        ipv4_address: 172.20.0.4
-
-  adminer:
-    image: adminer:latest
-    container_name: review-galaxy-adminer
-    ports:
-      - 8080:8080
-    networks:
-      review-galaxy-network:
-        ipv4_address: 172.20.0.5
-
-volumes:
-  review-galaxy-db:
-    name: review-galaxy-db
 
 networks:
   review-galaxy-network:

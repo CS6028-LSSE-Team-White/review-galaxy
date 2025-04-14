@@ -1,9 +1,9 @@
 package com.example.middleware.controller;
 
-import com.example.middleware.dto.FeatureDTO;
 import com.example.middleware.model.APIResponse;
 import com.example.middleware.model.APIStatus;
-import com.example.middleware.service.FeatureService;
+import com.example.middleware.model.Feature;
+import com.example.middleware.util.Util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200") // Allow requests from the Angular frontend
 public class FeatureController {
-    private final FeatureService featureService;
     private final ObjectMapper objectMapper;
 
     @GetMapping("/features")
@@ -21,7 +20,8 @@ public class FeatureController {
         try {
             return new APIResponse(
                     APIStatus.SUCCESS,
-                    objectMapper.writeValueAsString(featureService.getAllFeatures()));
+                    objectMapper.writeValueAsString(Util.getFeatures())
+            );
         } catch (Exception e) {
             return new APIResponse(APIStatus.ERROR, e.getMessage());
         }
@@ -30,21 +30,14 @@ public class FeatureController {
     @GetMapping("/feature/{id}")
     public APIResponse getFeatureById(@NotNull @PathVariable Long id) {
         try {
+            Feature feature = Util.findFeatureById(id);
+            if (feature == null) {
+                return new APIResponse(APIStatus.ERROR, "Feature not found");
+            }
             return new APIResponse(
                     APIStatus.SUCCESS,
-                    objectMapper.writeValueAsString(featureService.getFeatureById(id)));
-        } catch (Exception e) {
-            return new APIResponse(APIStatus.ERROR, e.getMessage());
-        }
-    }
-
-    @PostMapping("/feature")
-    public APIResponse createFeature(@RequestBody FeatureDTO featureDTO) {
-        try {
-            return new APIResponse(
-                    APIStatus.SUCCESS,
-                    objectMapper.writeValueAsString(
-                            featureService.createFeature(featureDTO)));
+                    objectMapper.writeValueAsString(feature)
+            );
         } catch (Exception e) {
             return new APIResponse(APIStatus.ERROR, e.getMessage());
         }
