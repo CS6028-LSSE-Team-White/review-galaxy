@@ -7,3 +7,5 @@ RUN dos2unix /app/mvnw
 RUN chmod +x /app/mvnw
 RUN /app/mvnw clean package -DskipTests
 RUN cp /app/target/middleware-0.0.1-SNAPSHOT.jar /app/app.jar
+EXPOSE 3000
+CMD ["java", "-jar", "/app/app.jar"]
