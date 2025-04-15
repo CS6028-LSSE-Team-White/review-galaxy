@@ -23,20 +23,46 @@ public class ReviewController {
         try {
             return new APIResponse(
                     APIStatus.SUCCESS,
-                    objectMapper.writeValueAsString(Util.getReviews())
+                    objectMapper.writeValueAsString(Util.getZoomReviews())
             );
         } catch (Exception e) {
             return new APIResponse(APIStatus.ERROR, e.getMessage());
         }
     }
 
+    @GetMapping("/firefox/reviews")
+    public APIResponse getFirefoxReviews() {
+        try {
+            return new APIResponse(
+                    APIStatus.SUCCESS,
+                    objectMapper.writeValueAsString(Util.getFirefoxReviews())
+            );
+        } catch (Exception e) {
+            return new APIResponse(APIStatus.ERROR, e.getMessage());
+        }
+    }
+
+    @GetMapping("/webex/reviews")
+    public APIResponse getWebexReviews() {
+        try {
+            return new APIResponse(
+                    APIStatus.SUCCESS,
+                    objectMapper.writeValueAsString(Util.getWebexReviews())
+            );
+        } catch (Exception e) {
+            return new APIResponse(APIStatus.ERROR, e.getMessage());
+        }
+    }
+
+
+
     @GetMapping("/review/{id}")
     public APIResponse getReviewById(@NotNull @PathVariable Long id) {
         try {
-            Review review = Util.findReviewById(id);
+            Review review = Util.findZoomReviewById(id);
             return new APIResponse(
                     APIStatus.SUCCESS,
-                    objectMapper.writeValueAsString(Util.findReviewById(id))
+                    objectMapper.writeValueAsString(Util.findZoomReviewById(id))
             );
         } catch (Exception e) {
             return new APIResponse(APIStatus.ERROR, e.getMessage());
@@ -46,7 +72,7 @@ public class ReviewController {
     @GetMapping("/reviews/version/{version}")
     public APIResponse getReviewsByProductVersion(@NotNull @PathVariable String version) {
         try {
-            List<Review> revs = Util.findReviewsByProductVersion(version);
+            List<Review> revs = Util.findZoomReviewsByProductVersion(version);
             return new APIResponse(
                     APIStatus.SUCCESS,
                     objectMapper.writeValueAsString(revs)

@@ -19,8 +19,34 @@ public class FeatureController {
         try {
             return new APIResponse(
                     APIStatus.SUCCESS,
-                    objectMapper.writeValueAsString(Util.getFeatures())
+                    objectMapper.writeValueAsString(Util.getZoomFeatures())
             );
+        } catch (Exception e) {
+            return new APIResponse(APIStatus.ERROR, e.getMessage());
+        }
+    }
+
+    @GetMapping("/firefox/features")
+    public APIResponse getFirefoxFeatures() {
+        try {
+            return new APIResponse(
+                    APIStatus.SUCCESS,
+                    objectMapper.writeValueAsString(Util.getFirefoxFeatures())
+            );
+
+        } catch (Exception e) {
+            return new APIResponse(APIStatus.ERROR, e.getMessage());
+        }
+    }
+
+    @GetMapping("/webex/features")
+    public APIResponse getWebexFeatures() {
+        try {
+            return new APIResponse(
+                    APIStatus.SUCCESS,
+                    objectMapper.writeValueAsString(Util.getWebexFeatures())
+            );
+
         } catch (Exception e) {
             return new APIResponse(APIStatus.ERROR, e.getMessage());
         }
@@ -29,7 +55,7 @@ public class FeatureController {
     @GetMapping("/feature/{id}")
     public APIResponse getFeatureById(@NotNull @PathVariable Long id) {
         try {
-            Feature feature = Util.findFeatureById(id);
+            Feature feature = Util.findZoomFeatureById(id);
             if (feature == null) {
                 return new APIResponse(APIStatus.ERROR, "Feature not found");
             }
