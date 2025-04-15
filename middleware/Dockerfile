@@ -23,6 +23,8 @@ WORKDIR /app
 
 # Copy the built JAR from the build stage
 COPY --from=builder /app/app.jar /app/app.jar
+COPY --from=builder /app/zoom-features.csv /app/zoom-features.csv
+COPY --from=builder /app/zoom-reviews.csv /app/zoom-reviews.csv
 
 # Expose the port your application listens on (adjust if needed)
 EXPOSE 8080
