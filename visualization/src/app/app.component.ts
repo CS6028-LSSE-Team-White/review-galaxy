@@ -22,8 +22,11 @@ export class AppComponent implements OnInit {
 
   loadingStateHandler(): void {
     this.loadingState++;
-    if (this.loadingState === 3) {
+    if (this.loadingState === 6) {
       this.changeProduct(1); // Set default product to Zoom
+      console.log('Zoom product data:', this.productData_zoom); // Log the Zoom product data
+      console.log('Webex product data:', this.productData_webex); // Log the Webex product data
+      console.log('Firefox product data:', this.productData_firefox); // Log the Firefox product data
       this.isLoading = false;
     }
   }
@@ -83,20 +86,21 @@ export class AppComponent implements OnInit {
     this.apiService.getFeatures().subscribe({
       next: (response: any) => {
         this.productData_zoom.features = JSON.parse(response.message); // Store fetched features data
-        // Fetch reviews data
-        this.apiService.getReviews().subscribe({
-          next: (response: any) => {
-            this.productData_zoom.reviews = JSON.parse(response.message); // Store fetched reviews data
-            console.log('Fetched product data (zoom):', this.productData_zoom); // Log the fetched data
-            this.loadingStateHandler(); // Increment loading state
-          },
-          error: (error: any) => {
-            console.error('Error fetching reviews:', error);
-          },
-        });
+        this.loadingStateHandler(); // Increment loading state
       },
       error: (error: any) => {
         console.error('Error fetching features:', error);
+      },
+    });
+
+    // Fetch reviews data
+    this.apiService.getReviews().subscribe({
+      next: (response: any) => {
+        this.productData_zoom.reviews = JSON.parse(response.message); // Store fetched reviews data
+        this.loadingStateHandler(); // Increment loading state
+      },
+      error: (error: any) => {
+        console.error('Error fetching reviews:', error);
       },
     });
 
@@ -104,23 +108,21 @@ export class AppComponent implements OnInit {
     this.apiService.getFeatures().subscribe({
       next: (response: any) => {
         this.productData_webex.features = JSON.parse(response.message); // Store fetched features data
-        // Fetch reviews data
-        this.apiService.getReviews().subscribe({
-          next: (response: any) => {
-            this.productData_webex.reviews = JSON.parse(response.message); // Store fetched reviews data
-            console.log(
-              'Fetched product data: (webex)',
-              this.productData_webex
-            ); // Log the fetched data
-            this.loadingStateHandler(); // Increment loading state
-          },
-          error: (error: any) => {
-            console.error('Error fetching reviews:', error);
-          },
-        });
+        this.loadingStateHandler(); // Increment loading state
       },
       error: (error: any) => {
         console.error('Error fetching features:', error);
+      },
+    });
+
+    // Fetch reviews data
+    this.apiService.getReviews().subscribe({
+      next: (response: any) => {
+        this.productData_webex.reviews = JSON.parse(response.message); // Store fetched reviews data
+        this.loadingStateHandler(); // Increment loading state
+      },
+      error: (error: any) => {
+        console.error('Error fetching reviews:', error);
       },
     });
 
@@ -128,23 +130,21 @@ export class AppComponent implements OnInit {
     this.apiService.getFeatures().subscribe({
       next: (response: any) => {
         this.productData_firefox.features = JSON.parse(response.message); // Store fetched features data
-        // Fetch reviews data
-        this.apiService.getReviews().subscribe({
-          next: (response: any) => {
-            this.productData_firefox.reviews = JSON.parse(response.message); // Store fetched reviews data
-            console.log(
-              'Fetched product data (firefox):',
-              this.productData_firefox
-            ); // Log the fetched data
-            this.loadingStateHandler(); // Increment loading state
-          },
-          error: (error: any) => {
-            console.error('Error fetching reviews:', error);
-          },
-        });
+        this.loadingStateHandler(); // Increment loading state
       },
       error: (error: any) => {
         console.error('Error fetching features:', error);
+      },
+    });
+
+    // Fetch reviews data
+    this.apiService.getReviews().subscribe({
+      next: (response: any) => {
+        this.productData_firefox.reviews = JSON.parse(response.message); // Store fetched reviews data
+        this.loadingStateHandler(); // Increment loading state
+      },
+      error: (error: any) => {
+        console.error('Error fetching reviews:', error);
       },
     });
   }
