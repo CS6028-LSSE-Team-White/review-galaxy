@@ -1,3 +1,3 @@
 #!/bin/sh
-envsubst '$MIDDLEWARE_ADDR' < /usr/src/app/src/assets/config.template.js > /usr/src/app/src/assets/config.js
-exec ng serve --host 0.0.0.0
+envsubst '$MIDDLEWARE_ADDR' < /usr/share/nginx/html/assets/config.template.js > /usr/share/nginx/html/assets/config.js
+exec nginx -g 'daemon off;'
