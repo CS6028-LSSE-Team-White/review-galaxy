@@ -18,20 +18,30 @@ export class RadialGraphComponent implements OnInit {
   constructor(private el: ElementRef) {}
 
   ngOnInit(): void {
-    // Load feature and review data
+    // Normalize review data from old API structure
+    //I know this is kinda hacky
     this.features = this.productData.features;
-    this.reviews = this.productData.reviews;
-
-    // Ensure releases array is initialized
+  
+    this.reviews = this.productData.reviews.map((r: any) => ({
+      nodeId: r.id?.toString() ?? '',
+      reviewId: r.id?.toString() ?? '',
+      score: r.rating,
+      reviewer: r.username,
+      reviewDate: new Date(r.timestamp),
+      content: r.comment,
+      appVersion: r.release_version,
+    }));
+  
+    // Log to verify
+    console.log('Normalized Reviews:', this.reviews);
+  
     if (!this.productData.releases) {
       this.productData.releases = [];
     }
-
-    // Build structured product data and draw the visualization
+  
     this.generateProductData();
     this.drawRadialGraph();
-
-    // Handle responsiveness on window resize
+  
     window.addEventListener('resize', this.handleResize.bind(this));
   } // Import static feature and review data
   // import featuresData from 'src/assets/features.json';
@@ -48,7 +58,7 @@ export class RadialGraphComponent implements OnInit {
   // Organizes features and reviews into versioned releases
   generateProductData(): void {
     const versionGroups: { [version: string]: any[] } = {};
-
+  
     // Group features by their full release version
     this.features.forEach((feature: any) => {
       const version = feature['release_version'];
@@ -57,26 +67,23 @@ export class RadialGraphComponent implements OnInit {
       }
       versionGroups[version].push(feature);
     });
-
-    // Add a new product_version key to each review
-    // TODO: create logic here to assign product_version based on review date
-    this.reviews.forEach((review: any) => {
-      review['product_version'] = '5.17.5';
-    });
-
+  
     // Map version groups into structured release objects
     this.productData.releases = Object.keys(versionGroups).map((version) => {
       const features = versionGroups[version];
       const majorVersion = version.split('.').slice(0, 2).join('.');
-
+  
+      // Filter reviews that match the current release version
+      const matchingReviews = this.reviews.filter(
+        (review: any) => review.appVersion === version
+      );
+  
       return {
         versionId: version,
         majorVersion: majorVersion,
         releaseDate: features[0].releaseDate,
         features: features,
-        reviews: this.reviews.filter((review) =>
-          review.product_version.startsWith(version)
-        ),
+        reviews: matchingReviews,
       };
     });
   }
@@ -119,13 +126,19 @@ export class RadialGraphComponent implements OnInit {
       .filter((event: any) => {
         return event.type === 'wheel';
       })
-      .scaleExtent([0.5, 5])
+      .scaleExtent([0.1, 5])
       .on('zoom', (event) => {
         currentTransform = event.transform;
         zoomLayer.attr('transform', event.transform);
       });
 
-    (svg as any).call(zoom);
+      const initialZoom = d3.zoomIdentity
+      .translate(0, 0)
+      .scale(0.6);
+    
+    (svg as any)
+      .call(zoom)
+      .call(zoom.transform, initialZoom);
 
     // Handle manual zooming on wheel events
     svg.on('wheel.zoom', (event: WheelEvent) => {
@@ -144,24 +157,30 @@ export class RadialGraphComponent implements OnInit {
     });
 
     // Draw center circle
-    svg
-      .append('circle')
-      .attr('cx', centerX)
-      .attr('cy', centerY)
-      .attr('r', 20)
-      .attr('fill', '#ffcc00')
-      .attr('stroke', '#444')
-      .attr('class', 'center-circle')
-      .append('text')
-      .attr('x', centerX)
-      .attr('y', centerY)
-      .attr('text-anchor', 'middle')
-      .attr('dy', '.35em')
-      .style('font-size', '20px')
-      .style('font-family', 'Open Sans, sans-serif')
-      .text('Zoom');
+    zoomLayer
+    .append('circle')
+    .attr('cx', centerX)
+    .attr('cy', centerY)
+    .attr('r', 200)
+    .attr('fill', '#007bff')
+    .attr('stroke', '#333')
+    .attr('stroke-width', 2)
+    .attr('class', 'center-circle');
 
-    const baseRadius = 200;
+    // Add "Zoom" label inside
+    zoomLayer
+    .append('text')
+    .attr('x', centerX)
+    .attr('y', centerY + 5) // slight vertical adjustment
+    .attr('text-anchor', 'middle')
+    .style('fill', '#fff')
+    .style('font-size', '24px')
+    .style('font-weight', 'bold')
+    .style('font-family', 'Open Sans, sans-serif')
+    .text('Zoom');
+
+
+    const baseRadius = 400;
     const ringSpacing = 200;
 
     // Draw concentric version rings
@@ -184,107 +203,110 @@ export class RadialGraphComponent implements OnInit {
         .attr('y', centerY - radius - 10)
         .attr('text-anchor', 'middle')
         .style('fill', '#fff')
-        .style('font-size', '12px')
+        .style('font-size', '20px')
         .text(`Version ${majorVersion}`);
     });
 
     // Render each version release as a circle on its ring
-    this.productData.releases.forEach((release: any, i: number) => {
-      const ringIndex = majorVersions.indexOf(release.majorVersion);
+    majorVersions.forEach((majorVersion, ringIndex) => {
       const ringRadius = baseRadius + ringIndex * ringSpacing;
-
-      const angle = (i * 2 * Math.PI) / this.productData.releases.length;
-      const x = centerX + ringRadius * Math.cos(angle);
-      const y = centerY + ringRadius * Math.sin(angle);
-
-      const circleRadius = 30 + 1.5 * release.features.length;
-
-      const avgRating = release.reviews.length
-        ? release.reviews.reduce(
-            (acc: number, r: { rating: number }) => acc + r.rating,
-            0
-          ) / release.reviews.length
-        : 0;
-
-      let fillColor = '#ffff00';
-      if (avgRating >= 4) fillColor = '#32CD32';
-      else if (avgRating <= 2) fillColor = '#e74c3c';
-
-      // Draw version bubble
-      zoomLayer
-        .append('circle')
-        .attr('cx', x)
-        .attr('cy', y)
-        .attr('r', circleRadius)
-        .attr('fill', fillColor)
-        .attr('stroke', '#444')
-        .attr('class', 'version-circle');
-
-      const fontSizeVersion = circleRadius / 4;
-      const fontSizeFeatures = circleRadius / 5;
-
-      // Version label inside the circle
-      zoomLayer
-        .append('text')
-        .attr('x', x)
-        .attr('y', y - 5)
-        .attr('text-anchor', 'middle')
-        .style('font-size', `${fontSizeVersion}px`)
-        .style('font-weight', 'bold')
-        .style('font-family', 'Open Sans, sans-serif')
-        .text(`${release.versionId}`);
-
-      // Feature count label inside the circle
-      zoomLayer
-        .append('text')
-        .attr('x', x)
-        .attr('y', y + 10)
-        .attr('text-anchor', 'middle')
-        .style('font-size', `${fontSizeFeatures}px`)
-        .style('font-weight', 'bold')
-        .style('font-family', 'Open Sans, sans-serif')
-        .text(
-          `${release.features.length} Feature${
-            release.features.length !== 1 ? 's' : ''
-          }`
-        );
-
-      // Orbiting review circles
-      const reviewOrbitRadius = circleRadius + 25;
-      release.reviews.forEach((review: any, j: number) => {
-        const angleOffset = (2 * Math.PI * j) / release.reviews.length;
-        const rx = x + reviewOrbitRadius * Math.cos(angleOffset);
-        const ry = y + reviewOrbitRadius * Math.sin(angleOffset);
-
-        let color = '#32CD32';
-        if (review.rating < 2) color = '#e74c3c';
-        else if (review.rating < 4) color = '#f1c40f';
-
-        // Draw review dot with tooltip on hover
+      const releasesOnRing = this.productData.releases.filter(
+        (r: any) => r.majorVersion === majorVersion
+      );
+    
+      const ringOffset = Math.random() * 2 * Math.PI;
+    
+      releasesOnRing.forEach((release: any, j: number) => {
+        const angle = ringOffset + (j * 2 * Math.PI) / releasesOnRing.length;
+        const x = centerX + ringRadius * Math.cos(angle);
+        const y = centerY + ringRadius * Math.sin(angle);
+    
+        const circleRadius = 30 + 1.5 * release.features.length;
+    
+        const avgRating = release.reviews.length
+          ? release.reviews.reduce(
+              (acc: number, r: { score: number }) => acc + r.score,
+              0
+            ) / release.reviews.length
+          : 0;
+    
+        let fillColor = '#ffff00';
+        if (avgRating >= 4) fillColor = '#32CD32';
+        else if (avgRating <= 2) fillColor = '#e74c3c';
+    
+        // Draw version bubble
         zoomLayer
           .append('circle')
-          .attr('cx', rx)
-          .attr('cy', ry)
-          .attr('r', 10)
-          .attr('fill', color)
-          .on('mouseover', (event) => {
-            const stars = '⭐️'.repeat(review.rating);
-            tooltip
-              .style('opacity', 1)
-              .style('left', `${event.pageX + 10}px`)
-              .style('top', `${event.pageY - 20}px`).html(`
-                <div style="font-family: 'Open Sans', sans-serif;">
-                  <div style="font-weight: bold; font-size: 20px;">${review.username}</div>
-                  <div style="font-size: 16px;"><em>Version: ${review.product_version}</em></div>
-                  <div style="margin: 8px 0;">${stars}</div>
-                  <div style="font-size: 16px;">${review.comment}</div>
-                </div>
-              `);
-          })
-          .on('mouseout', () => {
-            tooltip.style('opacity', 0);
-          });
+          .attr('cx', x)
+          .attr('cy', y)
+          .attr('r', circleRadius)
+          .attr('fill', fillColor)
+          .attr('stroke', '#444')
+          .attr('class', 'version-circle');
+    
+        const fontSizeVersion = circleRadius / 4;
+        const fontSizeFeatures = circleRadius / 5;
+    
+        zoomLayer
+          .append('text')
+          .attr('x', x)
+          .attr('y', y - 5)
+          .attr('text-anchor', 'middle')
+          .style('font-size', `${fontSizeVersion}px`)
+          .style('font-weight', 'bold')
+          .style('font-family', 'Open Sans, sans-serif')
+          .text(`${release.versionId}`);
+    
+        zoomLayer
+          .append('text')
+          .attr('x', x)
+          .attr('y', y + 10)
+          .attr('text-anchor', 'middle')
+          .style('font-size', `${fontSizeFeatures}px`)
+          .style('font-weight', 'bold')
+          .style('font-family', 'Open Sans, sans-serif')
+          .text(
+            `${release.features.length} Feature${
+              release.features.length !== 1 ? 's' : ''
+            }`
+          );
+    
+        // Orbiting review circles
+        const reviewOrbitRadius = circleRadius + 25;
+        release.reviews.forEach((review: any, j: number) => {
+          const angleOffset = (2 * Math.PI * j) / release.reviews.length;
+          const rx = x + reviewOrbitRadius * Math.cos(angleOffset);
+          const ry = y + reviewOrbitRadius * Math.sin(angleOffset);
+    
+          let color = '#32CD32';
+          if (review.score < 2) color = '#e74c3c';
+          else if (review.score < 4) color = '#f1c40f';
+    
+          zoomLayer
+            .append('circle')
+            .attr('cx', rx)
+            .attr('cy', ry)
+            .attr('r', 10)
+            .attr('fill', color)
+            .on('mouseover', (event) => {
+              const stars = '⭐️'.repeat(review.score);
+              tooltip
+                .style('opacity', 1)
+                .style('left', `${event.pageX + 10}px`)
+                .style('top', `${event.pageY - 20}px`).html(`
+                  <div style="font-family: 'Open Sans', sans-serif;">
+                    <div style="font-weight: bold; font-size: 20px;">${review.reviewer}</div>
+                    <div style="font-size: 16px;"><em>Version: ${review.appVersion}</em></div>
+                    <div style="margin: 8px 0;">${stars}</div>
+                    <div style="font-size: 16px;">${review.content}</div>
+                  </div>
+                `);
+            })
+            .on('mouseout', () => {
+              tooltip.style('opacity', 0);
+            });
+        });
       });
     });
   }
-}
+}    
