@@ -21,6 +21,18 @@ export class APIService {
     });
   }
 
+  getWebexReviews(): Observable<any> {
+    return this.httpClient.get(this.base_url + 'webex/reviews', {
+      responseType: 'json',
+    });
+  }
+
+  getFirefoxReviews(): Observable<any> {
+    return this.httpClient.get(this.base_url + 'firefox/reviews', {
+      responseType: 'json',
+    });
+  }
+
   getReviewById(id: number): Observable<any> {
     return this.httpClient.get(this.base_url + `review/${id}`, {
       responseType: 'json',
@@ -35,6 +47,18 @@ export class APIService {
 
   getFeatures(): Observable<any> {
     return this.httpClient.get(this.base_url + 'features', {
+      responseType: 'json',
+    });
+  }
+
+  getWebexFeatures(): Observable<any> {
+    return this.httpClient.get(this.base_url + 'webex/features', {
+      responseType: 'json',
+    });
+  }
+
+  getFirefoxFeatures(): Observable<any> {
+    return this.httpClient.get(this.base_url + 'firefox/features', {
       responseType: 'json',
     });
   }
