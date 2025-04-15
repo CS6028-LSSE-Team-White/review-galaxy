@@ -21,7 +21,7 @@ export class RadialGraphComponent implements OnInit {
     // Normalize review data from old API structure
     //I know this is kinda hacky
     this.features = this.productData.features;
-  
+
     this.reviews = this.productData.reviews.map((r: any) => ({
       nodeId: r.id?.toString() ?? '',
       reviewId: r.id?.toString() ?? '',
@@ -31,17 +31,36 @@ export class RadialGraphComponent implements OnInit {
       content: r.comment,
       appVersion: r.release_version,
     }));
-  
+
+    // Selectively filtering reviews based on the release version
+    // Only show between 10-30 reviews per release version
+    const versionReviewCounts: { [version: string]: number } = {};
+    this.reviews.forEach((review: any) => {
+      const version = review.appVersion;
+      if (!versionReviewCounts[version]) {
+        versionReviewCounts[version] = Math.floor(Math.random() * 21) + 10; // Initialize with random number between 10 and 30
+      }
+    });
+
+    this.reviews = this.reviews.filter((review: any) => {
+      const version = review.appVersion;
+      if (versionReviewCounts[version] > 0) {
+        versionReviewCounts[version]--; // Decrement the count
+        return true; // Keep this review
+      }
+      return false; // Filter out this review
+    });
+
     // Log to verify
     console.log('Normalized Reviews:', this.reviews);
-  
+
     if (!this.productData.releases) {
       this.productData.releases = [];
     }
-  
+
     this.generateProductData();
     this.drawRadialGraph();
-  
+
     window.addEventListener('resize', this.handleResize.bind(this));
   } // Import static feature and review data
   // import featuresData from 'src/assets/features.json';
@@ -58,7 +77,7 @@ export class RadialGraphComponent implements OnInit {
   // Organizes features and reviews into versioned releases
   generateProductData(): void {
     const versionGroups: { [version: string]: any[] } = {};
-  
+
     // Group features by their full release version
     this.features.forEach((feature: any) => {
       const version = feature['release_version'];
@@ -67,17 +86,17 @@ export class RadialGraphComponent implements OnInit {
       }
       versionGroups[version].push(feature);
     });
-  
+
     // Map version groups into structured release objects
     this.productData.releases = Object.keys(versionGroups).map((version) => {
       const features = versionGroups[version];
       const majorVersion = version.split('.').slice(0, 2).join('.');
-  
+
       // Filter reviews that match the current release version
       const matchingReviews = this.reviews.filter(
         (review: any) => review.appVersion === version
       );
-  
+
       return {
         versionId: version,
         majorVersion: majorVersion,
@@ -120,11 +139,16 @@ export class RadialGraphComponent implements OnInit {
     const zoomLayer = svg.append('g');
     let currentTransform = d3.zoomIdentity;
 
-    // Enable scroll-based zoom only (no dragging)
+    // Enable scroll-based zoom and dragging
     const zoom = d3
       .zoom()
       .filter((event: any) => {
-        return event.type === 'wheel';
+        return (
+          event.type === 'wheel' ||
+          event.type === 'mousedown' ||
+          event.type === 'mousemove' ||
+          event.type === 'mouseup'
+        );
       })
       .scaleExtent([0.1, 5])
       .on('zoom', (event) => {
@@ -132,13 +156,9 @@ export class RadialGraphComponent implements OnInit {
         zoomLayer.attr('transform', event.transform);
       });
 
-      const initialZoom = d3.zoomIdentity
-      .translate(0, 0)
-      .scale(0.6);
-    
-    (svg as any)
-      .call(zoom)
-      .call(zoom.transform, initialZoom);
+    const initialZoom = d3.zoomIdentity.translate(0, 0).scale(0.6);
+
+    (svg as any).call(zoom).call(zoom.transform, initialZoom);
 
     // Handle manual zooming on wheel events
     svg.on('wheel.zoom', (event: WheelEvent) => {
@@ -158,27 +178,26 @@ export class RadialGraphComponent implements OnInit {
 
     // Draw center circle
     zoomLayer
-    .append('circle')
-    .attr('cx', centerX)
-    .attr('cy', centerY)
-    .attr('r', 200)
-    .attr('fill', '#007bff')
-    .attr('stroke', '#333')
-    .attr('stroke-width', 2)
-    .attr('class', 'center-circle');
+      .append('circle')
+      .attr('cx', centerX)
+      .attr('cy', centerY)
+      .attr('r', 200)
+      .attr('fill', '#007bff')
+      .attr('stroke', '#333')
+      .attr('stroke-width', 2)
+      .attr('class', 'center-circle');
 
     // Add "Zoom" label inside
     zoomLayer
-    .append('text')
-    .attr('x', centerX)
-    .attr('y', centerY + 5) // slight vertical adjustment
-    .attr('text-anchor', 'middle')
-    .style('fill', '#fff')
-    .style('font-size', '24px')
-    .style('font-weight', 'bold')
-    .style('font-family', 'Open Sans, sans-serif')
-    .text('Zoom');
-
+      .append('text')
+      .attr('x', centerX)
+      .attr('y', centerY + 5) // slight vertical adjustment
+      .attr('text-anchor', 'middle')
+      .style('fill', '#fff')
+      .style('font-size', '24px')
+      .style('font-weight', 'bold')
+      .style('font-family', 'Open Sans, sans-serif')
+      .text('Zoom');
 
     const baseRadius = 400;
     const ringSpacing = 200;
@@ -213,27 +232,27 @@ export class RadialGraphComponent implements OnInit {
       const releasesOnRing = this.productData.releases.filter(
         (r: any) => r.majorVersion === majorVersion
       );
-    
+
       const ringOffset = Math.random() * 2 * Math.PI;
-    
+
       releasesOnRing.forEach((release: any, j: number) => {
         const angle = ringOffset + (j * 2 * Math.PI) / releasesOnRing.length;
         const x = centerX + ringRadius * Math.cos(angle);
         const y = centerY + ringRadius * Math.sin(angle);
-    
+
         const circleRadius = 30 + 1.5 * release.features.length;
-    
+
         const avgRating = release.reviews.length
           ? release.reviews.reduce(
               (acc: number, r: { score: number }) => acc + r.score,
               0
             ) / release.reviews.length
           : 0;
-    
+
         let fillColor = '#ffff00';
         if (avgRating >= 4) fillColor = '#32CD32';
         else if (avgRating <= 2) fillColor = '#e74c3c';
-    
+
         // Draw version bubble
         zoomLayer
           .append('circle')
@@ -243,10 +262,10 @@ export class RadialGraphComponent implements OnInit {
           .attr('fill', fillColor)
           .attr('stroke', '#444')
           .attr('class', 'version-circle');
-    
+
         const fontSizeVersion = circleRadius / 4;
         const fontSizeFeatures = circleRadius / 5;
-    
+
         zoomLayer
           .append('text')
           .attr('x', x)
@@ -256,7 +275,7 @@ export class RadialGraphComponent implements OnInit {
           .style('font-weight', 'bold')
           .style('font-family', 'Open Sans, sans-serif')
           .text(`${release.versionId}`);
-    
+
         zoomLayer
           .append('text')
           .attr('x', x)
@@ -270,18 +289,18 @@ export class RadialGraphComponent implements OnInit {
               release.features.length !== 1 ? 's' : ''
             }`
           );
-    
+
         // Orbiting review circles
         const reviewOrbitRadius = circleRadius + 25;
         release.reviews.forEach((review: any, j: number) => {
           const angleOffset = (2 * Math.PI * j) / release.reviews.length;
           const rx = x + reviewOrbitRadius * Math.cos(angleOffset);
           const ry = y + reviewOrbitRadius * Math.sin(angleOffset);
-    
+
           let color = '#32CD32';
           if (review.score < 2) color = '#e74c3c';
           else if (review.score < 4) color = '#f1c40f';
-    
+
           zoomLayer
             .append('circle')
             .attr('cx', rx)
@@ -309,4 +328,4 @@ export class RadialGraphComponent implements OnInit {
       });
     });
   }
-}    
+}

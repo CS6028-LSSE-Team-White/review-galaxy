@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
         // Fetch reviews data
         this.apiService.getReviews().subscribe({
           next: (response: any) => {
-            this.productData.reviews = JSON.parse(response.message).slice(0,1000); // Store fetched reviews data
+            this.productData.reviews = JSON.parse(response.message); // Store fetched reviews data
             this.isLoading = false; // Set loading state to false after fetching data
             console.log('Fetched product data:', this.productData); // Log the fetched data
           },
