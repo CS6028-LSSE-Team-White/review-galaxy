@@ -65,10 +65,12 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "visualization:build:production"
+              "browserTarget": "visualization:build:production",
+              "disableHostCheck": true
             },
             "development": {
-              "browserTarget": "visualization:build:development"
+              "browserTarget": "visualization:build:development",
+              "disableHostCheck": true
             }
           },
           "defaultConfiguration": "development"
