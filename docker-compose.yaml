@@ -5,9 +5,9 @@ services:
       dockerfile: Dockerfile
     container_name: review-galaxy-visualization
     ports:
-      - "4200:4200"
+      - "40112:80"
     environment:
-      - MIDDLEWARE_ADDR=http://localhost:3000/
+      - MIDDLEWARE_ADDR=http://localhost:8080/
     networks:
       review-galaxy-network:
         ipv4_address: 172.20.0.2
@@ -17,9 +17,8 @@ services:
       context: ./middleware
       dockerfile: Dockerfile
     container_name: review-galaxy-middleware
-    entrypoint: ["java", "-jar", "-Dserver.port=3000", "/app/app.jar"]
     ports:
-      - "3000:3000"
+      - "8080:8080"
     networks:
       review-galaxy-network:
         ipv4_address: 172.20.0.3
