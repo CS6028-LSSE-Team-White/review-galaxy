@@ -105,7 +105,7 @@ export class AppComponent implements OnInit {
     });
 
     // Fetch features data for Webex
-    this.apiService.getFeatures().subscribe({
+    this.apiService.getWebexFeatures().subscribe({
       next: (response: any) => {
         this.productData_webex.features = JSON.parse(response.message); // Store fetched features data
         this.loadingStateHandler(); // Increment loading state
@@ -116,9 +116,18 @@ export class AppComponent implements OnInit {
     });
 
     // Fetch reviews data
-    this.apiService.getReviews().subscribe({
+    this.apiService.getWebexReviews().subscribe({
       next: (response: any) => {
-        this.productData_webex.reviews = JSON.parse(response.message); // Store fetched reviews data
+        let reviews = JSON.parse(response.message);
+        reviews = reviews.map((review: any) => {
+          return {
+            ...review,
+            release_version: new Date(review.timestamp)
+              .toISOString()
+              .split('T')[0], // Convert timestamp to YYYY-MM-DD format
+          };
+        });
+        this.productData_webex.reviews = reviews; // Store fetched reviews data
         this.loadingStateHandler(); // Increment loading state
       },
       error: (error: any) => {
@@ -127,6 +136,7 @@ export class AppComponent implements OnInit {
     });
 
     // Fetch features data for Firefox
+    // Firefox has no features tagged by release, so we are using the same features as Zoom
     this.apiService.getFeatures().subscribe({
       next: (response: any) => {
         this.productData_firefox.features = JSON.parse(response.message); // Store fetched features data
@@ -138,7 +148,7 @@ export class AppComponent implements OnInit {
     });
 
     // Fetch reviews data
-    this.apiService.getReviews().subscribe({
+    this.apiService.getFirefoxReviews().subscribe({
       next: (response: any) => {
         this.productData_firefox.reviews = JSON.parse(response.message); // Store fetched reviews data
         this.loadingStateHandler(); // Increment loading state

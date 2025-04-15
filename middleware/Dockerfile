@@ -25,6 +25,10 @@ WORKDIR /app
 COPY --from=builder /app/app.jar /app/app.jar
 COPY --from=builder /app/zoom-features.csv /app/zoom-features.csv
 COPY --from=builder /app/zoom-reviews.csv /app/zoom-reviews.csv
+COPY --from=builder /app/zoom-features.csv /app/webex-features.csv
+COPY --from=builder /app/zoom-reviews.csv /app/webex-reviews.csv
+COPY --from=builder /app/zoom-features.csv /app/firefox-features.csv
+COPY --from=builder /app/zoom-reviews.csv /app/firefox-reviews.csv
 
 # Expose the port your application listens on (adjust if needed)
 EXPOSE 8080
