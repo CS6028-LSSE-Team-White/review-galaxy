@@ -1,1 +1,18 @@
-<app-radial-graph [productData]="productData"></app-radial-graph>
+<div *ngIf="isLoading" class="loading-screen">
+  <div class="loading-wheel"></div>
+</div>
+
+<!-- Pass productData to app-radial-graph component -->
+<app-radial-graph
+  *ngIf="!isLoading"
+  [productData]="this.export_data"
+  [productName]="this.export_name"
+></app-radial-graph>
+
+<div *ngIf="!isLoading">
+  <div class="button-group">
+    <button class="button" (click)="changeProduct(1)">Zoom</button>
+    <button class="button" (click)="changeProduct(2)">Webex</button>
+    <button class="button" (click)="changeProduct(3)">Firefox</button>
+  </div>
+</div>
