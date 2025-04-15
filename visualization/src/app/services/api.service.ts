@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class APIService {
-  private base_url = 'http://localhost:3000/';
+  private base_url = (window as any).__env.MIDDLEWARE_ADDR;
   constructor(private httpClient: HttpClient) {}
 
   performDatabaseHealthCheck(): Observable<any> {
