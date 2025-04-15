@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, ElementRef, OnChanges } from '@angular/core';
 import * as d3 from 'd3';
 
 // // Import static feature and review data
@@ -10,14 +10,22 @@ import * as d3 from 'd3';
   templateUrl: './radial-graph.component.html',
   styleUrls: ['./radial-graph.component.scss'],
 })
-export class RadialGraphComponent implements OnInit {
+export class RadialGraphComponent implements OnChanges {
   @Input() productData!: any; // Input property to receive external product data
+  @Input() productName!: string; // Input property to receive the product name
   features: any[] = []; // Array to store features
   reviews: any[] = []; // Array to store reviews
 
   constructor(private el: ElementRef) {}
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
+    // Clear reviews and features arrays before processing new data
+    this.features = []; // Reset features array
+    this.reviews = []; // Reset reviews array
+
+    // Clear the previous radial graph
+    d3.select(this.el.nativeElement).select('svg').selectAll('*').remove();
+
     // Normalize review data from old API structure
     //I know this is kinda hacky
     this.features = this.productData.features;
@@ -52,7 +60,7 @@ export class RadialGraphComponent implements OnInit {
     });
 
     // Log to verify
-    console.log('Normalized Reviews:', this.reviews);
+    // console.log('Normalized Reviews:', this.reviews);
 
     if (!this.productData.releases) {
       this.productData.releases = [];
@@ -197,7 +205,7 @@ export class RadialGraphComponent implements OnInit {
       .style('font-size', '24px')
       .style('font-weight', 'bold')
       .style('font-family', 'Open Sans, sans-serif')
-      .text('Zoom');
+      .text(this.productName);
 
     const baseRadius = 400;
     const ringSpacing = 200;
