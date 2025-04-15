@@ -1,3 +1,4 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compileOnSave": false,
   "compilerOptions": {
@@ -21,9 +22,7 @@
     "lib": [
       "ES2022",
       "dom"
-    ],
-    "resolveJsonModule": true,  // <-- Add this line
-    "esModuleInterop": true      // <-- Add this line to ensure interoperability with CommonJS modules
+    ]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
