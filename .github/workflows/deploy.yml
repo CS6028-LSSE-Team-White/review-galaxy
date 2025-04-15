@@ -64,7 +64,7 @@ jobs:
 
       - name: Tag Images and Push
         run: |
-          for SERVICE in visualization middleware database; do
+          for SERVICE in visualization middleware; do
             docker tag review-galaxy-$SERVICE $REGISTRY/$SERVICE:${{ github.sha }}
             docker tag review-galaxy-$SERVICE $REGISTRY/$SERVICE:latest
             docker push $REGISTRY/$SERVICE:${{ github.sha }}
