@@ -1,10 +1,12 @@
-![image](https://github.com/user-attachments/assets/0716c674-dca9-49bf-83ef-9a5cce93ecb7)# review-galaxy
+# review-galaxy
 
 Review galaxy project repository for Large Scale Software Engineering ASN3.
 
 ## Development instructions
 
 - `docker compose up -d --build` in root directory to spawn all services
+
+![image](https://github.com/user-attachments/assets/0716c674-dca9-49bf-83ef-9a5cce93ecb7)
 
 ## Task  
 This assignment asks you to work as a team to design and prototype a novel visualization for (1) the released software features, (2) the app reviews, or (3) the traceability of the two. A mandatory requirement is for the visualization to explicitly incorporate the temporal dimension, that is, when a feature is released and/or when a review is posted.  
@@ -50,8 +52,6 @@ We created three different versions for each software including Zoom, Webex, and
 ## Firefox
 ![Firefox Design](Images/firefox.png)  
 
-TODO: talk more about the actual implementation once I get photos  
-
 ## Additional Information
 We had to create a novel idea for this project, it needed to be something new and not commonly used to display data in regular database systems. We believe we've accomplished this by designing our model with the following in mind:  
 - Radial layout to show the evolution of product​
@@ -71,4 +71,4 @@ We faced multiple challenges throughout this project, one being the sheer amount
 
 We also faced serveral other challenges including database functionality, integration betweeen multiple services, and merge conflicts in the repository. These were all to be expected as we had a large group and a lot of the systems we used throughout implementation were new to our members.  
 
-Feel free to check out our [final presentation](https://docs.google.com/presentation/d/1o6iFk8jshB3MIK1laEQGQUU2cCdLRqP2OpX6uxcvcsI/edit?usp=sharing)!
+Feel free to check out our [final presentation](https://docs.google.com/presentation/d/1XO2_HDc0xeXIDmuq63VFJTSLCKf5rmjJzemnsH5_9Vk/edit?usp=sharing)!
