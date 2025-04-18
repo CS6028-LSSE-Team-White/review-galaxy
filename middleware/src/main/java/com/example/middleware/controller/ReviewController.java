@@ -18,7 +18,7 @@ import java.util.List;
 public class ReviewController {
     private final ObjectMapper objectMapper;
 
-    @GetMapping("/reviews")
+    @GetMapping("/api/reviews")
     public APIResponse getReviews() {
         try {
             return new APIResponse(
@@ -30,7 +30,7 @@ public class ReviewController {
         }
     }
 
-    @GetMapping("/firefox/reviews")
+    @GetMapping("/api/firefox/reviews")
     public APIResponse getFirefoxReviews() {
         try {
             return new APIResponse(
@@ -42,7 +42,7 @@ public class ReviewController {
         }
     }
 
-    @GetMapping("/webex/reviews")
+    @GetMapping("/api/webex/reviews")
     public APIResponse getWebexReviews() {
         try {
             return new APIResponse(
@@ -56,7 +56,7 @@ public class ReviewController {
 
 
 
-    @GetMapping("/review/{id}")
+    @GetMapping("/api/review/{id}")
     public APIResponse getReviewById(@NotNull @PathVariable Long id) {
         try {
             Review review = Util.findZoomReviewById(id);
@@ -69,7 +69,7 @@ public class ReviewController {
         }
     }
 
-    @GetMapping("/reviews/version/{version}")
+    @GetMapping("/api/reviews/version/{version}")
     public APIResponse getReviewsByProductVersion(@NotNull @PathVariable String version) {
         try {
             List<Review> revs = Util.findZoomReviewsByProductVersion(version);

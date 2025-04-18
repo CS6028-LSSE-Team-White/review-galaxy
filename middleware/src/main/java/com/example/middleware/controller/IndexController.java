@@ -14,12 +14,8 @@ import com.example.middleware.model.APIStatus;
 @RestController
 public class IndexController {
 
-    @GetMapping("/")
-    public APIResponse home() {
-        return new APIResponse(APIStatus.SUCCESS, "Welcome to the Middleware API");
-    }
 
-    @GetMapping("/middleware-health")
+    @GetMapping("/api/middleware-health")
     public APIResponse databaseHealth() {
         try {
             LocalDateTime localDateTime = LocalDateTime.now();

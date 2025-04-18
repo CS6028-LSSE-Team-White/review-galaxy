@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class FeatureController {
     private final ObjectMapper objectMapper;
 
-    @GetMapping("/features")
+    @GetMapping("/api/features")
     public APIResponse getFeatures() {
         try {
             return new APIResponse(
@@ -26,7 +26,7 @@ public class FeatureController {
         }
     }
 
-    @GetMapping("/firefox/features")
+    @GetMapping("/api/firefox/features")
     public APIResponse getFirefoxFeatures() {
         try {
             return new APIResponse(
@@ -39,7 +39,7 @@ public class FeatureController {
         }
     }
 
-    @GetMapping("/webex/features")
+    @GetMapping("/api/webex/features")
     public APIResponse getWebexFeatures() {
         try {
             return new APIResponse(
@@ -52,7 +52,7 @@ public class FeatureController {
         }
     }
 
-    @GetMapping("/feature/{id}")
+    @GetMapping("/api/feature/{id}")
     public APIResponse getFeatureById(@NotNull @PathVariable Long id) {
         try {
             Feature feature = Util.findZoomFeatureById(id);

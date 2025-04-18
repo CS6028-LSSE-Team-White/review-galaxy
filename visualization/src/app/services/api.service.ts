@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class APIService {
-  private base_url = (window as any).__env.MIDDLEWARE_ADDR;
+  private base_url = '/api/';
   constructor(private httpClient: HttpClient) {}
 
   performMiddlewareHealthCheck(): Observable<any> {
