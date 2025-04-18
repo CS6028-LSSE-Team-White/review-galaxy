@@ -172,16 +172,16 @@ public class Util {
         for (int i = 1; i < data.size(); i++) {
             String[] row = data.get(i);
             Long id = (long) i;
-            String feature = row[0];
+            String feature = row[1];
             java.sql.Date releaseDate;
             // one row has no release date
             // tried to look at the KB on zoom's site but couldn't find anything
             // so I just set it to null here (for this row)
-            if(row[1] == null || row[1].isEmpty()) {
+            if(row[2] == null || row[2].isEmpty()) {
                 releaseDate = null;
             } else {
                 try {
-                    releaseDate = java.sql.Date.valueOf(row[1]);
+                    releaseDate = java.sql.Date.valueOf(row[2]);
                 } catch (Exception e) {
                     releaseDate = null;
                 }
